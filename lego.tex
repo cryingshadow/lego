@@ -23,31 +23,106 @@
 \newcommand{\pinposone}[5]{($(0,#3\brickheight)+(7:#1\brickwidth)+(138:#2\halfbrickwidth)+(7:#4*\brickwidth)+(138:#5*\halfbrickwidth)+(-0.6\brickwidth,-\halfbrickwidth)+(-0.05\brickwidth,1.35\brickheight)$)}
 \newcommand{\pinpostwo}[5]{($(0,#3\brickheight)+(7:#1\brickwidth)+(138:#2\halfbrickwidth)+(7:#4*\brickwidth)+(138:#5*\halfbrickwidth)+(-0.6\brickwidth,-\halfbrickwidth)+(0.3\brickwidth,1.35\brickheight)$)}
 
+
+\newcommand{\pins}[6]{%
+\foreach \i in {#1,...,1} {
+  \foreach \j in {#2,...,1} {
+    \pin{\pinposone{#4}{#5}{#6}{\i}{\j}}{\pinpostwo{#4}{#5}{#6}{\i}{\j}}{#3}
+  }
+}
+}
 \newcommand{\brick}[6]{%
 \setlength{\brickmultipliedx}{#1\brickwidth}
 \setlength{\brickmultipliedy}{#2\brickwidth}
 \filldraw[fill=#3,draw=black,thick] \startpos{#4}{#5}{#6} -- ++(7:\brickmultipliedx) -- ++(0mm,\brickheight) -- ++(138:0.5\brickmultipliedy) -- ++(187:\brickmultipliedx) -- ++(0mm,-\brickheight) -- cycle;
 \draw[black,thick] \startpos{#4}{#5}{#6} -- ++(0mm,\brickheight) -- ++(138:0.5\brickmultipliedy);
 \draw[black,thick] \startposplusheight{#4}{#5}{#6} -- ++(7:\brickmultipliedx);
-\foreach \i in {1,...,#1} {
-  \foreach \j in {1,...,#2} {
-    \pin{\pinposone{#4}{#5}{#6}{\i}{\j}}{\pinpostwo{#4}{#5}{#6}{\i}{\j}}{#3}
-  }
-}
 }
 
 \newcommand{\pin}[3]{%
-\filldraw[fill=#3,draw=black,thick] #1 -- ++(0mm,-1.6\brickdiaheight) .. controls +(\brickdia,-0.1\brickheight) .. ++(2\brickdia,0mm) -- ++(0mm,1.6\brickdiaheight) -- cycle;
-\filldraw[fill=#3,draw=black,thick] #2 ellipse[x radius=\brickdia, y radius=\brickdiaheight];
+\draw[thick] #2 ++(\brickdia,-1.2\brickdiaheight) arc(0:-180:{\brickdia} and {\brickdiaheight});
+\filldraw[fill=#3,draw=black,thick] #1 -- ++(0mm,-1.2\brickdiaheight) ++(2\brickdia,0mm) -- ++(0mm,1.2\brickdiaheight) -- cycle;
+\filldraw[fill=#3,draw=black,thick] #2 ++ (0mm,0.2\brickdiaheight) ellipse[x radius=\brickdia, y radius=\brickdiaheight];
+}
+
+\definecolor{myred}{rgb}{0.9,0.45,0.55}
+\definecolor{myblue}{rgb}{0.3,0.7,0.9}
+\definecolor{myyellow}{rgb}{1,1,0.5}
+
+
+\newcommand{\LegoDecomposition}{%
+\begin{tikzpicture}
+
+  % \brick{3}{1}{myblue}{-1}{0}{-1}
+  % \brick{1}{2}{myblue}{1}{-1}{0}
+  \brick{4}{2}{myblue}{1}{-1}{-1}
+  \pins{4}{2}{myblue}{1}{-1}{-1}
+  
+  \brick{2}{2}{myblue}{2}{0}{0}
+  \pins{2}{2}{myblue}{2}{0}{0}
+
+  % \brick{2}{2}{myblue}{3}{0}{1}
+  \brick{1}{6}{myblue}{0}{0}{-1}
+  \pins{1}{6}{myblue}{0}{0}{-1}
+
+  \brick{1}{3}{myblue}{0}{2}{0}
+  \pins{1}{3}{myblue}{0}{2}{0}
+  
+  \brick{2}{2}{myred}{0}{0}{0}
+    
+    \brick{2}{1}{myred}{1}{1}{1}
+    \pins{2}{1}{myred}{1}{1}{1}
+        
+    \brick{1}{3}{myred}{0}{1}{1}
+    \pins{1}{3}{myred}{0}{1}{1}
+  
+  \pins{2}{1}{myred}{0}{0}{0}
+
+  \pins{2}{1}{myblue}{2}{0}{0}
+  \pins{4}{1}{myblue}{1}{-1}{-1}
+  % \brick{2}{1}{myblue}{-2}{0}{0}
+\end{tikzpicture}}
+
+
+\newcommand{\LegoSingleton}{%
+\begin{tikzpicture}
+
+
+  \brick{3}{1}{myblue}{-1}{0}{-1}
+  \brick{1}{2}{myblue}{1}{-1}{0}
+  \brick{1}{1}{myred}{0}{0}{0}
+  \brick{2}{1}{myblue}{-2}{0}{0}
+
+  \pins{1}{2}{myblue}{1}{-1}{0}
+  \pins{1}{1}{myred}{0}{0}{0}
+  \pins{2}{1}{myblue}{-2}{0}{0}
+  
+\end{tikzpicture}
+}
+
+\newcommand{\LegoExample}{%
+
+\begin{tikzpicture}
+  \brick{3}{1}{myyellow}{6}{0}{0}
+  \brick{4}{2}{myblue}{2}{0}{0}
+  \pins{4}{2}{myblue}{2}{0}{0}
+  
+  \brick{2}{4}{myred}{0}{0}{0}
+  \brick{2}{4}{myred}{0}{1}{1}
+  
+  \pins{3}{1}{myyellow}{6}{0}{0}
+  
+  \pins{2}{1}{myred}{0}{0}{0}
+  \pins{2}{4}{myred}{0}{1}{1}
+  
+  \end{tikzpicture}
+  
 }
 
 \begin{document}
 
-\begin{tikzpicture}
-\brick{3}{1}{yellow}{6}{0}{0}
-\brick{4}{2}{blue}{2}{0}{0}
-\brick{2}{4}{red}{0}{0}{0}
-\brick{2}{4}{red}{0}{1}{1}
-\end{tikzpicture}
+\LegoExample
+\LegoSingleton
+\LegoDecomposition
 
 \end{document}
